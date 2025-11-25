@@ -1,6 +1,6 @@
 package com.jiujitsu.core.enum
 
-enum class BeltColor {
+enum class BeltGrade {
     WHITE,
     BLUE,
     PURPLE,

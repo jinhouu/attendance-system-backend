@@ -1,6 +1,6 @@
 package com.jiujitsu.core.storage.entity
 
-import com.jiujitsu.core.enum.BeltColor
+import com.jiujitsu.core.enum.BeltGrade
 import com.jiujitsu.core.vo.BeltRank
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -23,7 +23,7 @@ class MemberEntity (
     val expirationDate: LocalDate,
 ): BaseEntity(id) {
     companion object {
-        fun register(name: String, code: String, phone: String, belt: BeltColor, grau: Int): MemberEntity {
+        fun register(name: String, code: String, phone: String, belt: BeltGrade, grau: Int): MemberEntity {
             return MemberEntity(
                 name = name,
                 code = code,
