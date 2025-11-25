@@ -18,10 +18,10 @@ class MemberService(
     }
 
     fun validateCode(code: String) {
-        require(code.isNotEmpty() ) { CodeValidFailException("code is invalid") }
-        require(code.length == 4 ) { CodeValidFailException("code length is not 4") }
-        require(code.matches(Regex("[0-9]+")) ) { CodeValidFailException("code contains not number") }
-        require(!memberFinder.codeIsDuplicated(code) ) { CodeValidFailException("code is duplicated") }
+        require(code.isNotEmpty() ) { throw CodeValidFailException("code is invalid") }
+        require(code.length == 4 ) { throw CodeValidFailException("code length is not 4") }
+        require(code.matches(Regex("[0-9]+")) ) { throw CodeValidFailException("code contains not number") }
+        require(!memberFinder.codeIsDuplicated(code) ) { throw CodeValidFailException("code is duplicated") }
     }
 
     fun getMemberById(id: Long): MemberResponse? {
