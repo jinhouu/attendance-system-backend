@@ -1,87 +1,49 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.spring") apply false
-    kotlin("plugin.jpa") apply false
-    id("org.springframework.boot") apply false
-    id("io.spring.dependency-management")
+    kotlin("jvm") version "1.9.25"
+    kotlin("plugin.spring") version "1.9.25"
+    id("org.springframework.boot") version "3.5.8"
+    id("io.spring.dependency-management") version "1.1.7"
+    kotlin("plugin.jpa") version "1.9.25"
 }
 
-java.sourceCompatibility = JavaVersion.valueOf("VERSION_${property("javaVersion")}")
+group = "kr.jiujitsu"
+version = "0.0.1-SNAPSHOT"
 
-allprojects {
-    group = "${property("projectGroup")}"
-    version = "${property("applicationVersion")}"
-
-    repositories {
-        mavenCentral()
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
-subprojects {
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
-    apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
-    apply(plugin = "org.springframework.boot")
-    apply(plugin = "io.spring.dependency-management")
+repositories {
+    mavenCentral()
+}
 
-    dependencyManagement {
-        imports {
-            mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudDependenciesVersion")}")
-        }
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    runtimeOnly("com.h2database:h2")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xjsr305=strict")
     }
+}
 
-    dependencies {
-        implementation("org.jetbrains.kotlin:kotlin-reflect")
-        testImplementation("org.springframework.boot:spring-boot-starter-test")
-        testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
+}
 
-        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    }
-
-    tasks.getByName("bootJar") {
-        enabled = false
-    }
-
-    tasks.getByName("jar") {
-        enabled = true
-    }
-
-    java.sourceCompatibility = JavaVersion.valueOf("VERSION_${property("javaVersion")}")
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "${project.property("javaVersion")}"
-        }
-    }
-
-    tasks.test {
-        useJUnitPlatform {
-            excludeTags("develop")
-        }
-    }
-
-    tasks.register<Test>("unitTest") {
-        group = "verification"
-        useJUnitPlatform {
-            excludeTags("develop", "context")
-        }
-    }
-
-    tasks.register<Test>("contextTest") {
-        group = "verification"
-        useJUnitPlatform {
-            includeTags("context")
-        }
-    }
-
-    tasks.register<Test>("developTest") {
-        group = "verification"
-        useJUnitPlatform {
-            includeTags("develop")
-        }
-    }
-
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
