@@ -1,7 +1,5 @@
 # 회원관리 API 목록
 
-URL Prefix : /v1/api/~
-
 ## 회원 API
 
 | URL                   |  METHOD  | PARAMS                                                                                                                       | DESC       |
