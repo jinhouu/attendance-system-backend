@@ -1,42 +1,53 @@
 package kr.jiujitsu.manage.member.api
 
-import kr.jiujitsu.manage.member.application.command.MemberRegisterCommand
-import kr.jiujitsu.manage.member.application.result.MemberResult
-import kr.jiujitsu.manage.member.application.exception.CodeAlreadyExistException
-import kr.jiujitsu.manage.member.application.exception.CodeValidFailException
+import kr.jiujitsu.manage.common.dto.ApiResponse
+import kr.jiujitsu.manage.member.api.request.MemberRegisterRequest
+import kr.jiujitsu.manage.member.api.request.MemberUpdateRequest
 import kr.jiujitsu.manage.member.application.MemberService
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import kr.jiujitsu.manage.member.application.result.MemberResult
+import org.springframework.http.HttpStatus
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/v1/members")
+@RequestMapping("/api/members")
 class MemberController(
-    private val memberService: MemberService
+    private val memberService: MemberService,
 ) {
+
     @PostMapping
-    fun register(request: MemberRegisterCommand): MemberResult {
-        return memberService.register(request)
+    fun register(
+        @RequestBody @Validated request: MemberRegisterRequest
+    ): ApiResponse<MemberResult> {
+
+        return ApiResponse (
+            status = HttpStatus.CREATED,
+            code = 201,
+            body = memberService.register(request.toCommand())
+        )
     }
 
     @GetMapping("/{id}")
-    fun getMemberDetail(@PathVariable id: Long): MemberResult? {
-        return memberService.getMemberById(id)
+    fun getMemberDetail(
+        @PathVariable id: Long,
+    ): ApiResponse<MemberResult> {
+
+        return ApiResponse (
+            status = HttpStatus.CREATED,
+            code = 201,
+            body = memberService.getMemberById(id)
+        )
     }
 
-    @GetMapping("/validate_code/{code}")
-    fun validateCode(@PathVariable code: String): Boolean {
-        try {
-            memberService.validateCode(code)
-            return true;
-        } catch ( e: Exception ){
-            when (e) {
-                is CodeValidFailException,
-                is CodeAlreadyExistException -> { return false }
-                else -> throw e;
-            }
-        }
+    @PutMapping("/{id}")
+    fun updateMember(
+        @PathVariable id: Long,
+        @RequestBody @Validated request: MemberUpdateRequest
+    ): ApiResponse<MemberResult> {
+        return ApiResponse (
+            status = HttpStatus.CREATED,
+            code = 201,
+            body = memberService.update(request.toCommand(id)),
+        )
     }
 }

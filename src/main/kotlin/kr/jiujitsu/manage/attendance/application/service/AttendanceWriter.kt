@@ -6,10 +6,13 @@ import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
 @Component
-class AttendanceWriter (
+class AttendanceWriter(
     private val attendanceRepository: AttendanceRepository,
 ) {
-    fun register(memberId: Long, datetime: LocalDateTime) {
+    fun register(
+        memberId: Long,
+        datetime: LocalDateTime,
+    ) {
         val entity = AttendanceEntity.Companion.register(memberId = memberId, datetime = datetime)
         attendanceRepository.save(entity)
     }

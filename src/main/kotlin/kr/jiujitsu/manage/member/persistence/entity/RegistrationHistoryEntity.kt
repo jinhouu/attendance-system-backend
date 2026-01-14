@@ -9,4 +9,4 @@ import kr.jiujitsu.manage.common.entity.BaseEntity
 class RegistrationHistoryEntity(
     val memberId: Long,
     val extendDate: String,
-): BaseEntity() {}
+) : BaseEntity()

@@ -1,6 +1,6 @@
 package kr.jiujitsu.manage.common.enums
 
-enum class BeltGrade {
+enum class Belt {
     WHITE,
     BLUE,
     PURPLE,

@@ -7,7 +7,6 @@ data class AttendanceResult(
     val id: Long,
     val timestamp: String,
     val time: String,
-
     @Embedded
     val memberInfo: MemberResult,
 )

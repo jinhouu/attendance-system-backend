@@ -7,18 +7,15 @@ import kotlin.jvm.optionals.getOrNull
 
 @Component
 class MemberFinder(
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
 ) {
-    fun find(id: Long): MemberResult? {
-        return memberRepository.findById(id).getOrNull()
+    fun find(id: Long): MemberResult? =
+        memberRepository
+            .findById(id)
+            .getOrNull()
             ?. let { MemberResult.fromEntity(it) }
-    }
 
-    fun codeIsDuplicated(code: String): Boolean {
-        return memberRepository.existsByCode(code)
-    }
+    fun codeIsDuplicated(code: String): Boolean = memberRepository.existsByCode(code)
 
-    fun findByCode(code: String): MemberResult? {
-        return memberRepository.findByCode(code)?.let { MemberResult.fromEntity(it) }
-    }
+    fun findByCode(code: String): MemberResult? = memberRepository.findByCode(code)?.let { MemberResult.fromEntity(it) }
 }

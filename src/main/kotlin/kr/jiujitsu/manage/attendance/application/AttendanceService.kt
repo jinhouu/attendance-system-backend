@@ -11,38 +11,40 @@ import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class AttendanceService (
+class AttendanceService(
     private val memberFinder: MemberFinder,
     private val attendanceRepository: AttendanceRepository,
 ) {
     fun register(code: String): AttendanceResult {
-        val member: MemberResult = memberFinder.findByCode(code)?: throw MemberNotFoundException()
+        val member: MemberResult = memberFinder.findByCode(code) ?: throw MemberNotFoundException()
 
         val attendanceTime = LocalDateTime.now()
 
-        val attendance = attendanceRepository.save(
-            AttendanceEntity(
-                memberId = member.id!!,
-                year = attendanceTime.year,
-                month = attendanceTime.month.value,
-                day = attendanceTime.dayOfMonth,
-                time = (attendanceTime.hour.toString() + ":" + attendanceTime.minute),
-                timestamp = attendanceTime
+        val attendance =
+            attendanceRepository.save(
+                AttendanceEntity(
+                    memberId = member.id!!,
+                    year = attendanceTime.year,
+                    month = attendanceTime.month.value,
+                    day = attendanceTime.dayOfMonth,
+                    time = (attendanceTime.hour.toString() + ":" + attendanceTime.minute),
+                    timestamp = attendanceTime,
+                ),
             )
-        )
 
         return AttendanceResult(
             attendance.id!!,
             attendance.timestamp.toString(),
             attendance.time,
-            member
+            member,
         )
     }
 
-    fun getDaily(command: GetDailyAttendanceCommand) : List<AttendanceResult> {
+    fun getDaily(command: GetDailyAttendanceCommand): List<AttendanceResult> {
         val date = command.date
 
-        return attendanceRepository.findByYearAndMonthAndDayOrderByTimeAsc(date.year, date.month.value, date.dayOfMonth)
+        return attendanceRepository
+            .findByYearAndMonthAndDayOrderByTimeAsc(date.year, date.month.value, date.dayOfMonth)
             .map { AttendanceResult(it.id!!, it.timestamp.toString(), it.time, memberFinder.find(it.memberId)!!) }
     }
 }

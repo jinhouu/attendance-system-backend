@@ -16,11 +16,8 @@ import java.time.LocalDateTime
 abstract class BaseEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    open val id: Long? = null
+    open val id: Long? = null,
 ) {
-
-
-
     @CreatedDate
     @Column(updatable = false, nullable = false)
     open lateinit var createdAt: LocalDateTime
