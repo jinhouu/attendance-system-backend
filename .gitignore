@@ -2,6 +2,7 @@
 .gradle
 .env
 build/
+.DS_Store
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -39,3 +40,9 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+### Frontend ###
+frontend/node_modules/
+frontend/dist/
+frontend/.idea/
+frontend/.git/

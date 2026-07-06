@@ -9,4 +9,16 @@ interface AttendanceRepository : JpaRepository<AttendanceEntity, Long> {
         month: Int,
         day: Int,
     ): List<AttendanceEntity>
+
+    fun findTop5ByYearAndMonthAndDayOrderByTimestampDesc(
+        year: Int,
+        month: Int,
+        day: Int,
+    ): List<AttendanceEntity>
+
+    fun countByYearAndMonthAndDay(
+        year: Int,
+        month: Int,
+        day: Int,
+    ): Long
 }

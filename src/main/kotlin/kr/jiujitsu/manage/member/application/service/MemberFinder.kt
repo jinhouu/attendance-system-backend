@@ -17,6 +17,8 @@ class MemberFinder(
             ?.let { MemberResult.fromEntity(it) }
             ?: throw MemberNotFoundException()
 
+    fun findAll(): List<MemberResult> = memberRepository.findAll().map { MemberResult.fromEntity(it) }
+
     fun codeIsDuplicated(code: String): Boolean = memberRepository.existsByCode(code)
 
     fun codeIsDuplicated(

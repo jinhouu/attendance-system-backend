@@ -20,6 +20,14 @@ import org.springframework.web.bind.annotation.RestController
 class MemberController(
     private val memberService: MemberService,
 ) {
+    @GetMapping
+    fun getMembers(): ApiResponse<List<MemberResult>> =
+        ApiResponse(
+            status = HttpStatus.OK,
+            code = 200,
+            body = memberService.getMembers(),
+        )
+
     @PostMapping
     fun register(
         @RequestBody @Validated request: MemberRegisterRequest,

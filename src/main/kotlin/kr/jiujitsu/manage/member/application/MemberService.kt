@@ -22,6 +22,8 @@ class MemberService(
         return memberManager.register(command.name, command.code, command.phone, command.belt, command.grau)
     }
 
+    fun getMembers(): List<MemberResult> = memberFinder.findAll()
+
     fun getMemberById(id: Long): MemberResult = memberFinder.find(id)
 
     @Transactional

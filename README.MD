@@ -33,9 +33,39 @@
 
 | URL | METHOD | PARAMS | DESC | STATUS |
 |:---|:---:|:---|:---|:---:|
+| `/api/members` | `GET` | - | 회원 목록 조회 | `200` |
 | `/api/members` | `POST` | body: `MemberRegisterRequest` | 신규 회원 등록 | `201` |
 | `/api/members/{id}` | `GET` | path: `id<Long>` | 회원 상세 조회 | `200` |
 | `/api/members/{id}` | `PUT` | path: `id<Long>`, body: `MemberUpdateRequest` | 회원 정보 수정 | `200` |
+
+### 회원 목록 조회
+
+```http
+GET /api/members
+```
+
+응답 예시:
+
+```json
+{
+  "status": "OK",
+  "code": 200,
+  "body": [
+    {
+      "id": 1,
+      "name": "홍길동",
+      "code": "1234",
+      "phone": "01012345678",
+      "belt": {
+        "belt": "BLUE",
+        "grau": 2
+      },
+      "registrationDate": "2026-07-06",
+      "expirationDate": "2026-07-06"
+    }
+  ]
+}
+```
 
 ### 회원 등록
 
@@ -233,6 +263,57 @@ GET /api/attendances/daily?date=2026-07-06
 }
 ```
 
+## 대시보드 API
+
+| URL | METHOD | PARAMS | DESC | STATUS |
+|:---|:---:|:---|:---|:---:|
+| `/api/dashboard/stats` | `GET` | - | 대시보드 통계 조회 | `200` |
+| `/api/dashboard/recent-members` | `GET` | - | 오늘 최근 출석 회원 조회 | `200` |
+
+### 대시보드 통계 조회
+
+```http
+GET /api/dashboard/stats
+```
+
+응답 예시:
+
+```json
+{
+  "status": "OK",
+  "code": 200,
+  "body": {
+    "todayAttendance": 10,
+    "totalMembers": 42,
+    "newMembersThisWeek": 3,
+    "expiringMembers": 5
+  }
+}
+```
+
+### 오늘 최근 출석 회원 조회
+
+```http
+GET /api/dashboard/recent-members
+```
+
+응답 예시:
+
+```json
+{
+  "status": "OK",
+  "code": 200,
+  "body": [
+    {
+      "name": "홍길동",
+      "belt": "blue",
+      "time": "10:30",
+      "avatar": ""
+    }
+  ]
+}
+```
+
 ## 에러 케이스
 
 | CASE | STATUS | MESSAGE |
@@ -248,7 +329,6 @@ GET /api/attendances/daily?date=2026-07-06
 
 | URL | METHOD | DESC |
 |:---|:---:|:---|
-| `/api/members` | `GET` | 멤버 목록 조회 |
 | `/api/members/{id}` | `DELETE` | 회원 정보 삭제 |
 | `/api/validate_code/{code}` | `GET` | 출석번호 중복 조회 |
 | `/api/attendances/{memberId}` | `GET` | 회원별 출결 기록 조회 |
