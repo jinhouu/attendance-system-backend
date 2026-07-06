@@ -37,6 +37,7 @@ class AttendanceEntity(
                 month = datetime.month.value,
                 day = datetime.dayOfMonth,
                 time = datetime.toLocalTime().toString(),
+                timestamp = datetime,
             )
     }
 }
