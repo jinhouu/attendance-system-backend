@@ -12,20 +12,13 @@ import java.time.LocalDate
 @Entity
 @Table(name = "member")
 class MemberEntity(
-
     val name: String,
-
     var code: String,
-
     var phone: String,
-
     @Enumerated(EnumType.STRING)
-    val belt: BeltRank,
-
+    var belt: BeltRank,
     var registrationDate: LocalDate,
-
     var expirationDate: LocalDate,
-
 ) : BaseEntity() {
     companion object {
         fun register(
@@ -34,17 +27,25 @@ class MemberEntity(
             phone: String,
             belt: Belt,
             grau: Int,
-        ): MemberEntity = MemberEntity(
-            name = name,
-            code = code,
-            phone = phone,
-            belt = BeltRank(belt, grau),
-            registrationDate = LocalDate.now(),
-            expirationDate = LocalDate.now(),
-        )
+        ): MemberEntity =
+            MemberEntity(
+                name = name,
+                code = code,
+                phone = phone,
+                belt = BeltRank(belt, grau),
+                registrationDate = LocalDate.now(),
+                expirationDate = LocalDate.now(),
+            )
     }
 
-    fun update() {
-
+    fun update(
+        code: String,
+        phone: String,
+        belt: Belt,
+        grau: Int,
+    ) {
+        this.code = code
+        this.phone = phone
+        this.belt = BeltRank(belt, grau)
     }
 }

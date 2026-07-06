@@ -6,5 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface MemberRepository : JpaRepository<MemberEntity, Long> {
     fun existsByCode(code: String): Boolean
 
+    fun existsByCodeAndIdNot(
+        code: String,
+        id: Long,
+    ): Boolean
+
     fun findByCode(code: String): MemberEntity?
 }

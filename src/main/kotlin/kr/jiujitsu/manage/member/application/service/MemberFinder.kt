@@ -1,5 +1,6 @@
 package kr.jiujitsu.manage.member.application.service
 
+import kr.jiujitsu.manage.member.application.exception.MemberNotFoundException
 import kr.jiujitsu.manage.member.application.result.MemberResult
 import kr.jiujitsu.manage.member.persistence.repository.MemberRepository
 import org.springframework.stereotype.Component
@@ -9,13 +10,19 @@ import kotlin.jvm.optionals.getOrNull
 class MemberFinder(
     private val memberRepository: MemberRepository,
 ) {
-    fun find(id: Long): MemberResult? =
+    fun find(id: Long): MemberResult =
         memberRepository
             .findById(id)
             .getOrNull()
-            ?. let { MemberResult.fromEntity(it) }
+            ?.let { MemberResult.fromEntity(it) }
+            ?: throw MemberNotFoundException()
 
     fun codeIsDuplicated(code: String): Boolean = memberRepository.existsByCode(code)
+
+    fun codeIsDuplicated(
+        code: String,
+        exceptId: Long,
+    ): Boolean = memberRepository.existsByCodeAndIdNot(code, exceptId)
 
     fun findByCode(code: String): MemberResult? = memberRepository.findByCode(code)?.let { MemberResult.fromEntity(it) }
 }
